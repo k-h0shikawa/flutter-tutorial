@@ -11,17 +11,65 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-        title: 'column and row',
-        home: Container(
-          child: Center(
-            child: Row(
-                // 位置情報を指定
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  Container(color: Colors.blue, width: 100, height: 100),
-                  Container(color: Colors.red, width: 100, height: 100),
-                ]),
+        title: 'stateful',
+        home: Scaffold(
+          appBar: AppBar(
+            title: Text('Stateful'),
           ),
+          body: Center(child: ClickGood()),
         ));
+  }
+}
+
+class ClickGood extends StatefulWidget {
+  const ClickGood({super.key});
+
+  @override
+  State<ClickGood> createState() => _ClickGoodState();
+}
+
+class _ClickGoodState extends State<ClickGood> {
+  bool _active = false;
+
+  void _handleTap() {
+    setState(() {
+      _active = !_active;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: _handleTap,
+      child: Container(
+        child: Column(
+          children: <Widget>[
+            Container(
+              child: Center(
+                child: new Icon(
+                  Icons.thumb_up,
+                  color: _active ? Colors.orange[700] : Colors.grey[500],
+                  size: 100.0,
+                ),
+              ),
+              width: 200.0,
+              height: 200.0,
+            ),
+            Container(
+              child: Center(
+                child: Text(
+                  _active ? 'Active' : 'Inactive',
+                  style: TextStyle(fontSize: 32.0, color: Colors.white),
+                ),
+              ),
+              width: 200.0,
+              height: 50.0,
+              decoration: BoxDecoration(
+                  color: _active ? Colors.orange[700] : Colors.grey[600]),
+            )
+          ],
+        ),
+      ),
+    );
   }
 }
