@@ -29,11 +29,14 @@ class ChangeForm extends StatefulWidget {
 }
 
 class _ChangeFormState extends State<ChangeForm> {
-  int _count = 0;
+  String _defalutValue = 'りんご';
+  final List<String> _list = <String>['りんご', 'オレンジ', 'みかん', 'ぶどう'];
+  String _text = '';
 
-  void _handlePressed() {
+  void _handleChange(String newValue) {
     setState(() {
-      _count++;
+      _text = newValue;
+      _defalutValue = newValue;
     });
   }
 
@@ -43,22 +46,21 @@ class _ChangeFormState extends State<ChangeForm> {
       padding: const EdgeInsets.all(50.0),
       child: Column(children: <Widget>[
         Text(
-          "$_count",
+          "$_text",
           style: TextStyle(
               color: Colors.blueAccent,
               fontSize: 30.0,
               fontWeight: FontWeight.w500),
         ),
-        TextButton(
-          onPressed: _handlePressed,
-          style: TextButton.styleFrom(
-            backgroundColor: Colors.blue,
-          ),
-          child: Text(
-            '更新',
-            style: TextStyle(color: Colors.white, fontSize: 20.0),
-          ),
-        ),
+        DropdownButton<String>(
+          value: _defalutValue,
+          onChanged: (String? newValue) {
+            _handleChange(newValue!);
+          },
+          items: _list.map<DropdownMenuItem<String>>((String value) {
+            return DropdownMenuItem<String>(value: value, child: Text(value));
+          }).toList(),
+        )
       ]),
     );
   }
