@@ -11,65 +11,55 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-        title: 'stateful',
+        title: 'Form',
         home: Scaffold(
           appBar: AppBar(
-            title: Text('Stateful'),
+            title: Text('Form'),
           ),
-          body: Center(child: ClickGood()),
+          body: Center(child: ChangeForm()),
         ));
   }
 }
 
-class ClickGood extends StatefulWidget {
-  const ClickGood({super.key});
+class ChangeForm extends StatefulWidget {
+  const ChangeForm({super.key});
 
   @override
-  State<ClickGood> createState() => _ClickGoodState();
+  State<ChangeForm> createState() => _ChangeFormState();
 }
 
-class _ClickGoodState extends State<ClickGood> {
-  bool _active = false;
+class _ChangeFormState extends State<ChangeForm> {
+  int _count = 0;
 
-  void _handleTap() {
+  void _handlePressed() {
     setState(() {
-      _active = !_active;
+      _count++;
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: _handleTap,
-      child: Container(
-        child: Column(
-          children: <Widget>[
-            Container(
-              child: Center(
-                child: new Icon(
-                  Icons.thumb_up,
-                  color: _active ? Colors.orange[700] : Colors.grey[500],
-                  size: 100.0,
-                ),
-              ),
-              width: 200.0,
-              height: 200.0,
-            ),
-            Container(
-              child: Center(
-                child: Text(
-                  _active ? 'Active' : 'Inactive',
-                  style: TextStyle(fontSize: 32.0, color: Colors.white),
-                ),
-              ),
-              width: 200.0,
-              height: 50.0,
-              decoration: BoxDecoration(
-                  color: _active ? Colors.orange[700] : Colors.grey[600]),
-            )
-          ],
+    return Container(
+      padding: const EdgeInsets.all(50.0),
+      child: Column(children: <Widget>[
+        Text(
+          "$_count",
+          style: TextStyle(
+              color: Colors.blueAccent,
+              fontSize: 30.0,
+              fontWeight: FontWeight.w500),
         ),
-      ),
+        TextButton(
+          onPressed: _handlePressed,
+          style: TextButton.styleFrom(
+            backgroundColor: Colors.blue,
+          ),
+          child: Text(
+            '更新',
+            style: TextStyle(color: Colors.white, fontSize: 20.0),
+          ),
+        ),
+      ]),
     );
   }
 }
