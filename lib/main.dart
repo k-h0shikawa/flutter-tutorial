@@ -1,6 +1,6 @@
-import 'package:english_words/english_words.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter/services.dart';
 
 void main() {
   // debugPaintSizeEnabled = true;
@@ -29,14 +29,11 @@ class ChangeForm extends StatefulWidget {
 }
 
 class _ChangeFormState extends State<ChangeForm> {
-  String _defalutValue = 'りんご';
-  final List<String> _list = <String>['りんご', 'オレンジ', 'みかん', 'ぶどう'];
   String _text = '';
 
-  void _handleChange(String newValue) {
+  void _hadleText(String e) {
     setState(() {
-      _text = newValue;
-      _defalutValue = newValue;
+      _text = e;
     });
   }
 
@@ -52,14 +49,16 @@ class _ChangeFormState extends State<ChangeForm> {
               fontSize: 30.0,
               fontWeight: FontWeight.w500),
         ),
-        DropdownButton<String>(
-          value: _defalutValue,
-          onChanged: (String? newValue) {
-            _handleChange(newValue!);
-          },
-          items: _list.map<DropdownMenuItem<String>>((String value) {
-            return DropdownMenuItem<String>(value: value, child: Text(value));
-          }).toList(),
+        new TextField(
+          enabled: true,
+          maxLength: 10,
+          maxLengthEnforcement: MaxLengthEnforcement.none,
+          style: TextStyle(color: Colors.black),
+          obscureText: false,
+          // maxLines: 1,
+          onChanged: _hadleText,
+          keyboardType: TextInputType.multiline,
+          maxLines: null,
         )
       ]),
     );
