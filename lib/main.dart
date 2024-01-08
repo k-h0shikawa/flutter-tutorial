@@ -1,28 +1,12 @@
 import 'package:english_words/english_words.dart';
 import 'package:flutter/material.dart';
 
-void main() => runApp(MyApp()); /*1*/
+void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
-  /*2*/
   @override
   Widget build(BuildContext context) {
-    /*3*/
-    return MaterialApp(
-      /*4*/
-      title: 'Welcome to Flutter',
-      home: Scaffold(
-        /*5*/
-        appBar: AppBar(
-          /*6*/
-          title: Text('Welcome to Flutter'),
-        ),
-        body: Center(
-          /*7*/
-          child: RandomWords(),
-        ),
-      ),
-    );
+    return MaterialApp(title: 'Startup Name Generator', home: RandomWords());
   }
 }
 
@@ -30,10 +14,38 @@ class MyApp extends StatelessWidget {
  ジェネリクスにRandomWordsを指定することでRandomWordsの状態を維持できるようにする
 */
 class RandomWordsState extends State<RandomWords> {
+  final _suggestions = <WordPair>[];
+  final _biggerFont = const TextStyle(fontSize: 18.0);
+
   @override
   Widget build(BuildContext context) {
-    final wordPair = WordPair.random();
-    return Text(wordPair.asPascalCase);
+    return Scaffold(
+      appBar: AppBar(title: Text('Startup Name Generator')),
+      body: _buildSuggestions(),
+    );
+  }
+
+  Widget _buildSuggestions() {
+    return ListView.builder(
+        padding: const EdgeInsets.all(16.0),
+        itemBuilder: (context, i) {
+          if (i.isOdd) return Divider();
+
+          final index = i ~/ 2;
+          if (index >= _suggestions.length) {
+            _suggestions.addAll(generateWordPairs().take(10));
+          }
+          return _buildRow(_suggestions[index]);
+        });
+  }
+
+  Widget _buildRow(WordPair pair) {
+    return ListTile(
+      title: Text(
+        pair.asPascalCase,
+        style: _biggerFont,
+      ),
+    );
   }
 }
 
