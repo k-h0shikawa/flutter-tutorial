@@ -1,3 +1,4 @@
+import 'package:english_words/english_words.dart';
 import 'package:flutter/material.dart';
 
 void main() => runApp(MyApp()); /*1*/
@@ -18,9 +19,25 @@ class MyApp extends StatelessWidget {
         ),
         body: Center(
           /*7*/
-          child: Text('Hello World'),
+          child: RandomWords(),
         ),
       ),
     );
   }
+}
+
+/*
+ ジェネリクスにRandomWordsを指定することでRandomWordsの状態を維持できるようにする
+*/
+class RandomWordsState extends State<RandomWords> {
+  @override
+  Widget build(BuildContext context) {
+    final wordPair = WordPair.random();
+    return Text(wordPair.asPascalCase);
+  }
+}
+
+class RandomWords extends StatefulWidget {
+  @override
+  RandomWordsState createState() => new RandomWordsState();
 }
