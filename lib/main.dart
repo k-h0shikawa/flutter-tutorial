@@ -55,10 +55,13 @@ class _ChangeFormState extends State<ChangeForm> {
           maxLengthEnforcement: MaxLengthEnforcement.none,
           style: TextStyle(color: Colors.black),
           obscureText: false,
-          // maxLines: 1,
+          maxLines: 1,
+          inputFormatters: <TextInputFormatter>[
+            // FilteringTextInputFormatter.digitsOnly,
+            FilteringTextInputFormatter.allow(RegExp(r'\d+'))
+          ],
           onChanged: _hadleText,
           keyboardType: TextInputType.multiline,
-          maxLines: null,
         )
       ]),
     );
