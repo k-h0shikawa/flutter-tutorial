@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 
 void main() {
@@ -14,9 +13,9 @@ class MyApp extends StatelessWidget {
         title: 'Form',
         home: Scaffold(
           appBar: AppBar(
-            title: Text('Form'),
+            title: const Text('Form'),
           ),
-          body: Center(child: ChangeForm()),
+          body: const Center(child: ChangeForm()),
         ));
   }
 }
@@ -29,12 +28,29 @@ class ChangeForm extends StatefulWidget {
 }
 
 class _ChangeFormState extends State<ChangeForm> {
+  final TextEditingController _textEditingController = TextEditingController();
   String _text = '';
 
-  void _hadleText(String e) {
+  @override
+  void initState() {
+    super.initState();
+    _textEditingController.addListener(_printLatestValue);
+  }
+
+  @override
+  void dispose() {
+    _textEditingController.dispose();
+    super.dispose();
+  }
+
+  void _handleText(String e) {
     setState(() {
       _text = e;
     });
+  }
+
+  void _printLatestValue() {
+    print("入力状況：${_textEditingController.text}");
   }
 
   @override
@@ -43,27 +59,32 @@ class _ChangeFormState extends State<ChangeForm> {
       padding: const EdgeInsets.all(50.0),
       child: Column(children: <Widget>[
         Text(
-          "$_text",
-          style: TextStyle(
+          _text,
+          style: const TextStyle(
               color: Colors.blueAccent,
               fontSize: 30.0,
               fontWeight: FontWeight.w500),
         ),
-        new TextField(
+        TextField(
           enabled: true,
           maxLength: 10,
           maxLengthEnforcement: MaxLengthEnforcement.none,
-          style: TextStyle(color: Colors.black),
+          style: const TextStyle(color: Colors.black),
           obscureText: false,
           maxLines: 1,
-          inputFormatters: <TextInputFormatter>[
-            // FilteringTextInputFormatter.digitsOnly,
-            FilteringTextInputFormatter.allow(RegExp(r'\d+'))
-          ],
-          onChanged: _hadleText,
-          keyboardType: TextInputType.multiline,
+          controller: _textEditingController,
+          onChanged: _handleText,
+          onSubmitted: _submission,
         )
       ]),
     );
+  }
+
+  void _submission(String e) {
+    print(_textEditingController.text);
+    _textEditingController.clear();
+    setState(() {
+      _text = '';
+    });
   }
 }
