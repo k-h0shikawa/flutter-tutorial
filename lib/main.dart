@@ -3,57 +3,67 @@ import 'package:flutter/services.dart';
 
 void main() {
   // debugPaintSizeEnabled = true;
-  runApp(MyApp());
+  runApp(MaterialApp(
+    home: MainPage(),
+  ));
 }
 
-class MyApp extends StatelessWidget {
+class MainPage extends StatefulWidget {
+  const MainPage({super.key});
+
+  @override
+  State<MainPage> createState() => _MainPageState();
+}
+
+class _MainPageState extends State<MainPage> {
+  int _currentIndex = 0;
+  final _pageWidgets = [
+    const PageWidget(color: Colors.white, title: 'Home'),
+    const PageWidget(color: Colors.blue, title: 'Album'),
+    const PageWidget(color: Colors.orange, title: 'Project')
+  ];
+
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-        title: 'Form',
-        home: Scaffold(
-          appBar: AppBar(
-            title: const Text('Form'),
-          ),
-          body: const Center(child: ChangeForm()),
-        ));
-  }
-}
-
-class ChangeForm extends StatefulWidget {
-  const ChangeForm({super.key});
-
-  @override
-  State<ChangeForm> createState() => _ChangeFormState();
-}
-
-class _ChangeFormState extends State<ChangeForm> {
-  final _formKey = GlobalKey<FormState>();
-
-  DateTime _date = DateTime.now();
-
-  Future<Null> _selectDate(BuildContext context) async {
-    final DateTime? picked = await showDatePicker(
-        context: context,
-        initialDate: _date,
-        firstDate: DateTime(2016),
-        lastDate: DateTime.now().add(const Duration(days: 360)));
-    if (picked != null) setState(() => _date = picked);
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('BottomNavigationBar'),
+      ),
+      body: _pageWidgets.elementAt(_currentIndex),
+      bottomNavigationBar: BottomNavigationBar(
+        items: <BottomNavigationBarItem>[
+          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'HOME'),
+          BottomNavigationBarItem(
+              icon: Icon(Icons.photo_album), label: 'Album'),
+          BottomNavigationBarItem(
+              icon: Icon(Icons.edit_square), label: 'Project'),
+        ],
+        currentIndex: _currentIndex,
+        fixedColor: Colors.blueAccent,
+        onTap: onItemTapped,
+        type: BottomNavigationBarType.fixed,
+      ),
+    );
   }
 
+  void onItemTapped(int index) => setState(() => _currentIndex = index);
+}
+
+class PageWidget extends StatelessWidget {
+  final Color color;
+  final String title;
+
+  const PageWidget({Key? key, required this.color, required this.title})
+      : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(50.0),
-      child: Column(
-        children: <Widget>[
-          Center(
-            child: Text("${_date}"),
-          ),
-          ElevatedButton(
-              onPressed: () => _selectDate(context), child: const Text('日付選択'))
-        ],
-      ),
+      color: color,
+      child: Center(
+          child: Text(
+        title,
+        style: TextStyle(fontSize: 25),
+      )),
     );
   }
 }
